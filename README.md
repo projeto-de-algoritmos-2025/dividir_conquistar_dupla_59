@@ -114,7 +114,7 @@ Dada uma expressão com `+ - *`, retornar **todas as possíveis respostas** ao p
 ## Apresentação 
 
 <div align="center">
-<a href="<<< LINK DO VÍDEO >>>"><img src="./imagens/print.png" width="50%"></a>
+<a href="https://youtu.be/Rz5NijfrO3Q"><img src="./imagens/print.png" width="50%"></a>
 
 <font size="3"><p style="text-align: center">Autores: <a href="https://github.com/thalesgvl">Thales Germano Vargas Lima</a> & <a href="https://github.com/vcpVitor">Vitor Carvalho Pereira</a></p></font>
 </div>
