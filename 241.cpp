@@ -1,13 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-/*
-  241. Different Ways to Add Parentheses
-  Estratégia: Dividir e Conquistar com memoização.
-  - Para cada operador na expressão, dividimos em esquerda e direita,
-    resolvemos recursivamente e combinamos todas as respostas.
-  - Memo por substring [l, r] para evitar recomputação.
-*/
 
 static bool isOp(char c) {
     return c=='+' || c=='-' || c=='*';
