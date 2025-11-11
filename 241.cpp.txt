@@ -1,0 +1,84 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+/*
+  241. Different Ways to Add Parentheses
+  Estratégia: Dividir e Conquistar com memoização.
+  - Para cada operador na expressão, dividimos em esquerda e direita,
+    resolvemos recursivamente e combinamos todas as respostas.
+  - Memo por substring [l, r] para evitar recomputação.
+*/
+
+static bool isOp(char c) {
+    return c=='+' || c=='-' || c=='*';
+}
+
+static int apply(int a, int b, char op) {
+    if (op == '+') return a + b;
+    if (op == '-') return a - b;
+    return a * b; // '*'
+}
+
+vector<int> solveExpr(const string& s, int l, int r,
+                      unordered_map<long long, vector<int>>& memo) {
+    long long key = ((long long)l << 32) ^ r;
+    if (memo.count(key)) return memo[key];
+
+    // Verifica se é só número (sem operador)
+    bool onlyDigits = true;
+    for (int i = l; i <= r; ++i) {
+        if (isOp(s[i])) { onlyDigits = false; break; }
+    }
+    if (onlyDigits) {
+        // parse número (pode ter mais de um dígito)
+        int val = stoi(s.substr(l, r - l + 1));
+        return memo[key] = vector<int>{val};
+    }
+
+    vector<int> ans;
+    // Divide em torno de cada operador
+    for (int i = l; i <= r; ++i) {
+        if (isOp(s[i])) {
+            auto L = solveExpr(s, l, i - 1, memo);
+            auto R = solveExpr(s, i + 1, r, memo);
+            for (int a : L) for (int b : R)
+                ans.push_back(apply(a, b, s[i]));
+        }
+    }
+    return memo[key] = ans;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    string expr;
+    if (!getline(cin, expr)) {
+        cerr << "Expressao vazia.\n";
+        return 1;
+    }
+
+    // Remover espaços
+    string s;
+    s.reserve(expr.size());
+    for (char c : expr) if (!isspace((unsigned char)c)) s.push_back(c);
+    if (s.empty()) {
+        cerr << "Expressao vazia apos remover espacos.\n";
+        return 1;
+    }
+
+    unordered_map<long long, vector<int>> memo;
+    auto res = solveExpr(s, 0, (int)s.size() - 1, memo);
+
+    // Ordena apenas para saída determinística
+    sort(res.begin(), res.end());
+
+    // Imprime no formato [a,b,c]
+    cout << "[";
+    for (size_t i = 0; i < res.size(); ++i) {
+        if (i) cout << ",";
+        cout << res[i];
+    }
+    cout << "]\n";
+    return 0;
+}
